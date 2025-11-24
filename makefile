@@ -53,8 +53,8 @@ LDFLAGS = -m elf_i386 -T $(SRCDIR)/linker.ld -nostdlib
 OBJS = \
   $(BUILDDIR)/kernel_entry.o \
   $(BUILDDIR)/kernel.o \
-  $(BUILDDIR)/console.o
-
+  $(BUILDDIR)/console.o \
+  $(BUILDDIR)/ports.o 
 .PHONY: all run clean
 
 all: $(BUILDDIR)/paramos.bin
@@ -90,6 +90,9 @@ $(BUILDDIR)/kernel.bin: $(BUILDDIR)/kernel.elf
 # --- Combine boot.bin + kernel.bin ---
 $(BUILDDIR)/paramos.bin: $(BUILDDIR)/boot.bin $(BUILDDIR)/kernel.bin
 	cat $(BUILDDIR)/boot.bin $(BUILDDIR)/kernel.bin > $@
+
+$(BUILDDIR)/ports.o: $(SRCDIR)/ports.c $(SRCDIR)/ports.h | $(BUILDDIR)
+	$(CC) $(CFLAGS) -c $< -o $@
 
 run: $(BUILDDIR)/paramos.bin
 	$(QEMU) -drive file=$(BUILDDIR)/paramos.bin,format=raw,index=0,media=disk
