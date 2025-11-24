@@ -1,7 +1,7 @@
-#include "stdint.h"
 #include "console.h"
+#include "stdint.h"
 
-void kernel_main(void) {
+void kernel_main() {
     console_clear(0x07);
 
     console_write("Welcome to Param OS C Kernel!\n", 0x0F);
