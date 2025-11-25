@@ -56,7 +56,11 @@ OBJS = \
   $(BUILDDIR)/console.o \
   $(BUILDDIR)/ports.o\
   $(BUILDDIR)/idt.o \
-  $(BUILDDIR)/isr.o 
+  $(BUILDDIR)/isr.o \
+  $(BUILDDIR)/pic.o \
+  $(BUILDDIR)/irq.o \
+  $(BUILDDIR)/timer.o
+
 .PHONY: all run clean
 
 all: $(BUILDDIR)/paramos.bin
@@ -102,6 +106,14 @@ $(BUILDDIR)/idt.o: $(SRCDIR)/idt.c $(SRCDIR)/idt.h $(SRCDIR)/stdint.h | $(BUILDD
 $(BUILDDIR)/isr.o: $(SRCDIR)/isr.asm | $(BUILDDIR)
 	$(ASM) -f elf32 $< -o $@
 
+$(BUILDDIR)/pic.o: $(SRCDIR)/pic.c $(SRCDIR)/pic.h $(SRCDIR)/ports.h $(SRCDIR)/stdint.h | $(BUILDDIR)
+	$(CC) $(CFLAGS) -c $< -o $@
+
+$(BUILDDIR)/irq.o: $(SRCDIR)/irq.c $(SRCDIR)/irq.h $(SRCDIR)/pic.h $(SRCDIR)/console.h $(SRCDIR)/stdint.h | $(BUILDDIR)
+	$(CC) $(CFLAGS) -c $< -o $@
+
+$(BUILDDIR)/timer.o: $(SRCDIR)/timer.c $(SRCDIR)/timer.h $(SRCDIR)/ports.h $(SRCDIR)/stdint.h | $(BUILDDIR)
+	$(CC) $(CFLAGS) -c $< -o $@
 
 run: $(BUILDDIR)/paramos.bin
 	$(QEMU) -drive file=$(BUILDDIR)/paramos.bin,format=raw,index=0,media=disk
