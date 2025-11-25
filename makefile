@@ -54,7 +54,9 @@ OBJS = \
   $(BUILDDIR)/kernel_entry.o \
   $(BUILDDIR)/kernel.o \
   $(BUILDDIR)/console.o \
-  $(BUILDDIR)/ports.o 
+  $(BUILDDIR)/ports.o\
+  $(BUILDDIR)/idt.o \
+  $(BUILDDIR)/isr.o 
 .PHONY: all run clean
 
 all: $(BUILDDIR)/paramos.bin
@@ -93,6 +95,13 @@ $(BUILDDIR)/paramos.bin: $(BUILDDIR)/boot.bin $(BUILDDIR)/kernel.bin
 
 $(BUILDDIR)/ports.o: $(SRCDIR)/ports.c $(SRCDIR)/ports.h | $(BUILDDIR)
 	$(CC) $(CFLAGS) -c $< -o $@
+	
+$(BUILDDIR)/idt.o: $(SRCDIR)/idt.c $(SRCDIR)/idt.h $(SRCDIR)/stdint.h | $(BUILDDIR)
+	$(CC) $(CFLAGS) -c $< -o $@
+
+$(BUILDDIR)/isr.o: $(SRCDIR)/isr.asm | $(BUILDDIR)
+	$(ASM) -f elf32 $< -o $@
+
 
 run: $(BUILDDIR)/paramos.bin
 	$(QEMU) -drive file=$(BUILDDIR)/paramos.bin,format=raw,index=0,media=disk
