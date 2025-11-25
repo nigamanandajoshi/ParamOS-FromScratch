@@ -21,13 +21,30 @@ void console_clear(uint8_t color) {
     cursor_col = 0;
 }
 
+static void scroll(uint8_t color) {
+    // Move each row up by 1
+    for (int row = 1; row < VGA_ROWS; row++) {
+        for (int col = 0; col < VGA_COLS; col++) {
+            VGA[(row - 1) * VGA_COLS + col] =
+                VGA[row * VGA_COLS + col];
+        }
+    }
+
+    // Clear the last row
+    for (int col = 0; col < VGA_COLS; col++) {
+        VGA[(VGA_ROWS - 1) * VGA_COLS + col] = vga_entry(' ', color);
+    }
+
+    cursor_row = VGA_ROWS - 1;
+    cursor_col = 0;
+}
+
 static void console_newline() {
     cursor_row++;
     cursor_col = 0;
 
-    // For now, no scrolling — wrap to top
     if (cursor_row >= VGA_ROWS) {
-        cursor_row = 0;
+        scroll(0x07);  // default terminal color
     }
 }
 
@@ -37,12 +54,9 @@ void console_putc(char c, uint8_t color) {
         return;
     }
 
-    int index = cursor_row * VGA_COLS + cursor_col;
-    VGA[index] = vga_entry(c, color);
-
+    VGA[cursor_row * VGA_COLS + cursor_col] = vga_entry(c, color);
     cursor_col++;
 
-    // Wrap to next line
     if (cursor_col >= VGA_COLS) {
         console_newline();
     }
