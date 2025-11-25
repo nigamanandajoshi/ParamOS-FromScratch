@@ -1,0 +1,53 @@
+<svg width="900" height="680" viewBox="0 0 900 680" xmlns="http://www.w3.org/2000/svg" font-family="monospace">
+
+  <!-- BIOS -->
+  <rect x="320" y="20" width="260" height="60" rx="8" fill="#1B263B" stroke="#415A77" stroke-width="2"/>
+  <text x="450" y="55" fill="#E0E1DD" text-anchor="middle" font-size="18">BIOS (Real Mode)</text>
+
+  <!-- Arrow -->
+  <line x1="450" y1="80" x2="450" y2="120" stroke="#778DA9" stroke-width="3" />
+  <polygon points="450,120 442,110 458,110" fill="#778DA9"/>
+
+  <!-- Bootloader -->
+  <rect x="220" y="120" width="460" height="100" rx="10" fill="#0D1B2A" stroke="#415A77" stroke-width="2"/>
+  <text x="450" y="155" fill="#E0E1DD" text-anchor="middle" font-size="18">Bootloader (x86 Assembly)</text>
+  <text x="450" y="185" fill="#E0E1DD" text-anchor="middle" font-size="14">
+    Loads kernel • Enables A20 • Sets up GDT • Switches to Protected Mode
+  </text>
+
+  <!-- Arrow -->
+  <line x1="450" y1="220" x2="450" y2="260" stroke="#778DA9" stroke-width="3" />
+  <polygon points="450,260 442,250 458,250" fill="#778DA9"/>
+
+  <!-- Protected Mode Entry -->
+  <rect x="210" y="260" width="480" height="90" rx="10" fill="#1B263B" stroke="#415A77" stroke-width="2"/>
+  <text x="450" y="295" fill="#E0E1DD" text-anchor="middle" font-size="18">
+    Kernel Entry (Protected Mode)
+  </text>
+  <text x="450" y="325" fill="#E0E1DD" text-anchor="middle" font-size="14">
+    Sets segments • Loads stack • Calls kernel_main()
+  </text>
+
+  <!-- Arrow -->
+  <line x1="450" y1="350" x2="450" y2="390" stroke="#778DA9" stroke-width="3" />
+  <polygon points="450,390 442,380 458,380" fill="#778DA9"/>
+
+  <!-- C Kernel -->
+  <rect x="170" y="390" width="560" height="120" rx="12" fill="#0D1B2A" stroke="#415A77" stroke-width="2"/>
+  <text x="450" y="425" fill="#E0E1DD" text-anchor="middle" font-size="18">Freestanding C Kernel</text>
+
+  <text x="450" y="460" fill="#E0E1DD" text-anchor="middle" font-size="14">
+    Console driver • Port I/O • Next subsystems: IDT, PIC, IRQ, PIT, Keyboard
+  </text>
+
+  <!-- Arrow -->
+  <line x1="450" y1="510" x2="450" y2="550" stroke="#778DA9" stroke-width="3" />
+  <polygon points="450,550 442,540 458,540" fill="#778DA9"/>
+
+  <!-- Kernel Subsystems -->
+  <rect x="150" y="550" width="600" height="110" rx="12" fill="#1B263B" stroke="#415A77" stroke-width="2"/>
+  <text x="450" y="585" fill="#E0E1DD" text-anchor="middle" font-size="18">Kernel Subsystems</text>
+  <text x="450" y="615" fill="#E0E1DD" text-anchor="middle" font-size="14">
+    IDT • ISR/IRQ • Timer • Keyboard • Memory Mgmt • Shell • Multitasking
+  </text>
+</svg>
