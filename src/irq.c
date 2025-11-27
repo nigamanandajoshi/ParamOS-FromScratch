@@ -2,6 +2,8 @@
 #include "pic.h"
 #include "console.h"
 #include "stdint.h"
+#include "keyboard.h"
+#include "ports.h"
 
 static uint32_t timer_ticks = 0;
 
@@ -15,6 +17,11 @@ void irq_handler(int irq) {
     }
 
     // other IRQs can be handled here later (keyboard, etc.)
+    else if (irq == 1) {
+        uint8_t sc = inb(0x60);
+        keyboard_handler(sc);
+    }
+
 
     pic_send_eoi(irq);
 }

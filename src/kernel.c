@@ -49,6 +49,8 @@
 #include "pic.h"
 #include "timer.h"
 #include "stdint.h"
+#include "keyboard.h"
+
 
 // called from isr21 stub
 void isr21_handler(void) {
@@ -70,6 +72,9 @@ void kernel_main(void) {
     timer_init(100); // 100 Hz => 10ms tick
     console_write("PIT timer initialized at 100Hz.\n", 0x07);
 
+    keyboard_init();
+    console_write("Keyboard initialized.\n", 0x0F);
+
     console_write("Enabling CPU interrupts (sti)...\n", 0x07);
     __asm__ __volatile__("sti");
 
@@ -85,4 +90,7 @@ void kernel_main(void) {
     for (;;) {
         __asm__ __volatile__("hlt");
     }
+
+
+
 }
