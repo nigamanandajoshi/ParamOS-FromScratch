@@ -50,7 +50,7 @@
 #include "timer.h"
 #include "stdint.h"
 #include "keyboard.h"
-
+#include "frames.h"
 
 // called from isr21 stub
 void isr21_handler(void) {
@@ -74,6 +74,24 @@ void kernel_main(void) {
 
     keyboard_init();
     console_write("Keyboard initialized.\n", 0x0F);
+
+    frames_init(64 * 1024 * 1024); // assume 64MB RAM (QEMU default)
+    console_write("Physical memory manager initialized.\n", 0x0A);
+    int f1 = frame_alloc();
+    int f2 = frame_alloc();
+    int f3 = frame_alloc();
+
+    console_write("Allocated frames: ", 0x0F);
+    console_putc('0' + (f1 % 10), 0x0F);
+    console_putc(' ', 0x0F);
+    console_putc('0' + (f2 % 10), 0x0F);
+    console_putc(' ', 0x0F);
+    console_putc('0' + (f3 % 10), 0x0F);
+    console_putc('\n', 0x0F);
+
+    frame_free(f1);
+    frame_free(f2);
+    frame_free(f3);
 
     console_write("Enabling CPU interrupts (sti)...\n", 0x07);
     __asm__ __volatile__("sti");

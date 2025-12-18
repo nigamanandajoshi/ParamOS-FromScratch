@@ -60,7 +60,8 @@ OBJS = \
   $(BUILDDIR)/pic.o \
   $(BUILDDIR)/irq.o \
   $(BUILDDIR)/timer.o \
-  $(BUILDDIR)/keyboard.o 
+  $(BUILDDIR)/keyboard.o \
+  $(BUILDDIR)/frames.o
 
 
 .PHONY: all run clean
@@ -118,6 +119,9 @@ $(BUILDDIR)/timer.o: $(SRCDIR)/timer.c $(SRCDIR)/timer.h $(SRCDIR)/ports.h $(SRC
 	$(CC) $(CFLAGS) -c $< -o $@
 
 $(BUILDDIR)/keyboard.o: $(SRCDIR)/keyboard.c $(SRCDIR)/keyboard.h $(SRCDIR)/ports.h | $(BUILDDIR)
+	$(CC) $(CFLAGS) -c $< -o $@
+
+$(BUILDDIR)/frames.o: $(SRCDIR)/frames.c $(SRCDIR)/frames.h $(SRCDIR)/stdint.h | $(BUILDDIR)
 	$(CC) $(CFLAGS) -c $< -o $@
 
 run: $(BUILDDIR)/paramos.bin
