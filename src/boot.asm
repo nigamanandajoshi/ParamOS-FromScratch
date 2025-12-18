@@ -43,7 +43,7 @@ a20_wait2:
     xor bx, bx
 
     mov ah, 0x02        ; BIOS read sector
-    mov al, 6          ; kernel = 6 sector
+    mov al, 8          ; kernel = 9 sector
     mov ch, 0
     mov cl, 2           ; start at sector #2
     mov dh, 0

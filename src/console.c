@@ -53,6 +53,34 @@ void console_putc(char c, uint8_t color) {
         console_newline();
         return;
     }
+    
+    /* Handle backspace */
+    if (c == '\b') {
+        if (cursor_col > 0) {
+            cursor_col--;
+        } else if (cursor_row > 0) {
+            /* Wrap to end of previous line */
+            cursor_row--;
+            cursor_col = VGA_COLS - 1;
+        }
+        /* Erase the character at current position */
+        VGA[cursor_row * VGA_COLS + cursor_col] = vga_entry(' ', color);
+        return;
+    }
+    
+    /* Handle tab */
+    if (c == '\t') {
+        /* Move to next 4-column boundary */
+        int spaces = 4 - (cursor_col % 4);
+        for (int i = 0; i < spaces && cursor_col < VGA_COLS; i++) {
+            VGA[cursor_row * VGA_COLS + cursor_col] = vga_entry(' ', color);
+            cursor_col++;
+        }
+        if (cursor_col >= VGA_COLS) {
+            console_newline();
+        }
+        return;
+    }
 
     VGA[cursor_row * VGA_COLS + cursor_col] = vga_entry(c, color);
     cursor_col++;
