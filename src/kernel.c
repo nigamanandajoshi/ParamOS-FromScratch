@@ -51,6 +51,8 @@
 #include "stdint.h"
 #include "keyboard.h"
 #include "frames.h"
+#include "kmalloc.h"
+
 
 // called from isr21 stub
 void isr21_handler(void) {
@@ -92,6 +94,18 @@ void kernel_main(void) {
     frame_free(f1);
     frame_free(f2);
     frame_free(f3);
+
+    // Initialize kernel heap (1MB starting at 2MB mark)
+    kmalloc_init(0x200000, 0x100000);  // 2MB start, 1MB size
+    console_write("Kernel heap initialized (1MB at 2MB).\n", 0x0A);
+
+    // Test kmalloc
+    uint8_t* test_ptr = (uint8_t*)kmalloc(256);
+    if (test_ptr) {
+        console_write("kmalloc test: allocated 256 bytes OK.\n", 0x0E);
+    } else {
+        console_write("kmalloc test: FAILED!\n", 0x0C);
+    }
 
     console_write("Enabling CPU interrupts (sti)...\n", 0x07);
     __asm__ __volatile__("sti");

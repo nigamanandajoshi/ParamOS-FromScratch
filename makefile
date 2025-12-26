@@ -61,7 +61,8 @@ OBJS = \
   $(BUILDDIR)/irq.o \
   $(BUILDDIR)/timer.o \
   $(BUILDDIR)/keyboard.o \
-  $(BUILDDIR)/frames.o
+  $(BUILDDIR)/frames.o \
+  $(BUILDDIR)/kmalloc.o
 
 
 .PHONY: all run clean
@@ -122,6 +123,9 @@ $(BUILDDIR)/keyboard.o: $(SRCDIR)/keyboard.c $(SRCDIR)/keyboard.h $(SRCDIR)/port
 	$(CC) $(CFLAGS) -c $< -o $@
 
 $(BUILDDIR)/frames.o: $(SRCDIR)/frames.c $(SRCDIR)/frames.h $(SRCDIR)/stdint.h | $(BUILDDIR)
+	$(CC) $(CFLAGS) -c $< -o $@
+
+$(BUILDDIR)/kmalloc.o: $(SRCDIR)/kmalloc.c $(SRCDIR)/kmalloc.h $(SRCDIR)/stdint.h | $(BUILDDIR)
 	$(CC) $(CFLAGS) -c $< -o $@
 
 run: $(BUILDDIR)/paramos.bin
