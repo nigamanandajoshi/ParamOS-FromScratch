@@ -62,7 +62,10 @@ OBJS = \
   $(BUILDDIR)/timer.o \
   $(BUILDDIR)/keyboard.o \
   $(BUILDDIR)/frames.o \
-  $(BUILDDIR)/kmalloc.o
+  $(BUILDDIR)/kmalloc.o \
+  $(BUILDDIR)/task.o \
+  $(BUILDDIR)/switch.o \
+  $(BUILDDIR)/shell.o
 
 
 .PHONY: all run clean
@@ -97,9 +100,10 @@ $(BUILDDIR)/kernel.elf: $(OBJS)
 $(BUILDDIR)/kernel.bin: $(BUILDDIR)/kernel.elf
 	$(OBJCOPY) -O binary $< $@
 
-# --- Combine boot.bin + kernel.bin ---
+# --- Combine boot.bin + kernel.bin and pad to 10KB ---
 $(BUILDDIR)/paramos.bin: $(BUILDDIR)/boot.bin $(BUILDDIR)/kernel.bin
 	cat $(BUILDDIR)/boot.bin $(BUILDDIR)/kernel.bin > $@
+	truncate -s 10240 $@
 
 $(BUILDDIR)/ports.o: $(SRCDIR)/ports.c $(SRCDIR)/ports.h | $(BUILDDIR)
 	$(CC) $(CFLAGS) -c $< -o $@
@@ -126,6 +130,15 @@ $(BUILDDIR)/frames.o: $(SRCDIR)/frames.c $(SRCDIR)/frames.h $(SRCDIR)/stdint.h |
 	$(CC) $(CFLAGS) -c $< -o $@
 
 $(BUILDDIR)/kmalloc.o: $(SRCDIR)/kmalloc.c $(SRCDIR)/kmalloc.h $(SRCDIR)/stdint.h | $(BUILDDIR)
+	$(CC) $(CFLAGS) -c $< -o $@
+
+$(BUILDDIR)/task.o: $(SRCDIR)/task.c $(SRCDIR)/task.h $(SRCDIR)/kmalloc.h $(SRCDIR)/console.h | $(BUILDDIR)
+	$(CC) $(CFLAGS) -c $< -o $@
+
+$(BUILDDIR)/switch.o: $(SRCDIR)/switch.asm | $(BUILDDIR)
+	$(ASM) -f elf32 $< -o $@
+
+$(BUILDDIR)/shell.o: $(SRCDIR)/shell.c $(SRCDIR)/shell.h $(SRCDIR)/console.h $(SRCDIR)/keyboard.h | $(BUILDDIR)
 	$(CC) $(CFLAGS) -c $< -o $@
 
 run: $(BUILDDIR)/paramos.bin
