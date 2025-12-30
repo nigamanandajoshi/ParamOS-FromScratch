@@ -35,6 +35,17 @@ Each subsystem is introduced only after its prerequisites are understood and val
 
 ---
 
+## 🏗️ System Architecture
+
+For a visual overview of the kernel components and their interactions, see the [Architecture Diagram](docs/architecture.md).
+
+```mermaid
+graph LR
+    Hardware --> Bootloader --> Kernel --> Subsystems --> Drivers --> Shell
+```
+
+---
+
 ## Boot Process Overview
 
 ParamOS implements the complete early boot pipeline:
