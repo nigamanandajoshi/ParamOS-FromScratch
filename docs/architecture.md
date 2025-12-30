@@ -86,10 +86,10 @@ graph TD
     Timer -.-> IO
     PMM -.-> RAM
 
-    classDef hardware fill:#f9f,stroke:#333,stroke-width:2px;
-    classDef boot fill:#ff9,stroke:#333,stroke-width:2px;
-    classDef kernel fill:#9cf,stroke:#333,stroke-width:2px;
-    classDef user fill:#9f9,stroke:#333,stroke-width:2px;
+    classDef hardware fill:#f9f,stroke:#333,stroke-width:2px,color:#000;
+    classDef boot fill:#ff9,stroke:#333,stroke-width:2px,color:#000;
+    classDef kernel fill:#9cf,stroke:#333,stroke-width:2px,color:#000;
+    classDef user fill:#9f9,stroke:#333,stroke-width:2px,color:#000;
 
     class BIOS,CPU,RAM,IO,VGA hardware;
     class Bootloader,RealMode,ProtMode boot;
