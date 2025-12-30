@@ -5,53 +5,53 @@ This document visualizes the high-level architecture of ParamOS, from the boot p
 ```mermaid
 graph TD
     subgraph Hardware ["Hardware Layer"]
-        BIOS[BIOS / UEFI]
-        CPU[x86 CPU]
-        RAM[Physical Memory]
-        IO[I/O Ports]
-        VGA[VGA Buffer]
+        BIOS["BIOS / UEFI"]
+        CPU["x86 CPU"]
+        RAM["Physical Memory"]
+        IO["I/O Ports"]
+        VGA["VGA Buffer"]
     end
 
     subgraph Boot ["Boot Sector (16-bit)"]
-        Bootloader[boot.asm]
-        RealMode[Real Mode]
-        ProtMode[Protected Mode Switch]
+        Bootloader["boot.asm"]
+        RealMode["Real Mode"]
+        ProtMode["Protected Mode Switch"]
     end
 
     subgraph KernelEntry ["Kernel Entry (Assembly)"]
-        EntryStub[kernel_entry.asm]
+        EntryStub["kernel_entry.asm"]
     end
 
     subgraph KernelCore ["Kernel Core (C)"]
-        KMain[kernel.c: kernel_main]
+        KMain["kernel.c: kernel_main"]
         
         subgraph Subsystems
-            IDT[IDT (Interrupts)]
-            PIC[PIC Remapping]
-            IRQ[IRQ Dispatcher]
-            Timer[PIT Timer]
+            IDT["IDT (Interrupts)"]
+            PIC["PIC Remapping"]
+            IRQ["IRQ Dispatcher"]
+            Timer["PIT Timer"]
         end
 
         subgraph Memory ["Memory Management"]
-            PMM[Frame Allocator (frames.c)]
-            KHeap[Kernel Heap (kmalloc.c)]
+            PMM["Frame Allocator (frames.c)"]
+            KHeap["Kernel Heap (kmalloc.c)"]
         end
 
         subgraph Drivers
-            Kbd[Keyboard Driver]
-            Console[VGA Console]
-            Ports[Port I/O]
+            Kbd["Keyboard Driver"]
+            Console["VGA Console"]
+            Ports["Port I/O"]
         end
 
         subgraph TaskManagement ["Task Management"]
-            Scheduler[Scheduler]
-            ContextSwitch[Context Switch (switch.asm)]
-            TaskStruct[Task Structures]
+            Scheduler["Scheduler"]
+            ContextSwitch["Context Switch (switch.asm)"]
+            TaskStruct["Task Structures"]
         end
     end
 
     subgraph UserSpace ["User Space (Simulated)"]
-        Shell[Kernel Shell Task]
+        Shell["Kernel Shell Task"]
     end
 
     %% Flow connections
