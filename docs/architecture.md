@@ -4,96 +4,62 @@ This document visualizes the high-level architecture of ParamOS, from the boot p
 
 ```mermaid
 graph TD
-    subgraph Hardware ["Hardware Layer"]
-        BIOS["BIOS / UEFI"]
-        CPU["x86 CPU"]
-        RAM["Physical Memory"]
-        IO["I/O Ports"]
-        VGA["VGA Buffer"]
+    %% Global Graph Settings
+    %% Use rounded nodes and explicit phases
+
+    subgraph Hardware ["🔌 Hardware Initialization"]
+        BIOS("BIOS / UEFI Hand-off")
+        HW_Resources("CPU, RAM & I/O")
     end
 
-    subgraph Boot ["Boot Sector (16-bit)"]
-        Bootloader["boot.asm"]
-        RealMode["Real Mode"]
-        ProtMode["Protected Mode Switch"]
+    subgraph Boot ["🚀 Boot Phase"]
+        Boot16("16-bit Bootloader")
+        ProtMode("Protected Mode Switch (32-bit)")
     end
 
-    subgraph KernelEntry ["Kernel Entry (Assembly)"]
-        EntryStub["kernel_entry.asm"]
-    end
-
-    subgraph KernelCore ["Kernel Core (C)"]
-        KMain["kernel.c: kernel_main"]
+    subgraph Kernel ["⚙️ Kernel Space"]
+        direction TB
+        KEntry("Assembly Entry Stub")
+        KMain("Kernel Main (C)")
         
-        subgraph Subsystems
-            IDT["IDT (Interrupts)"]
-            PIC["PIC Remapping"]
-            IRQ["IRQ Dispatcher"]
-            Timer["PIT Timer"]
+        subgraph Subsystems ["Core Subsystems"]
+            IDT("Interrupt Handling (IDT)")
+            Memory("Memory Manager (PMM/Heap)")
+            Sched("Task Scheduler")
         end
-
-        subgraph Memory ["Memory Management"]
-            PMM["Frame Allocator (frames.c)"]
-            KHeap["Kernel Heap (kmalloc.c)"]
-        end
-
-        subgraph Drivers
-            Kbd["Keyboard Driver"]
-            Console["VGA Console"]
-            Ports["Port I/O"]
-        end
-
-        subgraph TaskManagement ["Task Management"]
-            Scheduler["Scheduler"]
-            ContextSwitch["Context Switch (switch.asm)"]
-            TaskStruct["Task Structures"]
+        
+        subgraph DriverLayer ["Device Drivers"]
+            Keyboard("Keyboard Driver")
+            Display("VGA Console")
         end
     end
 
-    subgraph UserSpace ["User Space (Simulated)"]
-        Shell["Kernel Shell Task"]
+    subgraph User ["💻 User Interaction"]
+        Shell("Command Shell")
     end
 
-    %% Flow connections
-    BIOS --> Bootloader
-    Bootloader --> RealMode
-    RealMode --> ProtMode
-    ProtMode --> EntryStub
-    EntryStub --> KMain
-
-    %% Kernel Initialization Flow
-    KMain --> Console
-    KMain --> IDT
-    KMain --> PIC
-    KMain --> Timer
-    KMain --> Kbd
-    KMain --> PMM
-    KMain --> KHeap
-    KMain --> TaskManagement
-
-    %% Subsystem Interactions
-    IDT --> IRQ
-    IRQ --> Kbd
-    IRQ --> Timer
-    Kbd --> Shell
-    TaskManagement --> Shell
-    Shell --> Console
-    PMM --> KHeap
+    %% Main Execution Flow
+    BIOS ==> Boot16
+    Boot16 ==> ProtMode
+    ProtMode ==> KEntry
+    KEntry ==> KMain
+    KMain ==> Subsystems
+    KMain ==> DriverLayer
     
-    %% Hardware Interactions
-    Console -.-> VGA
-    Kbd -.-> IO
-    Timer -.-> IO
-    PMM -.-> RAM
+    %% Operational Logic
+    Sched -.-> Shell
+    Keyboard -- Input --> Shell
+    Shell -- Output --> Display
 
-    classDef hardware fill:#f9f,stroke:#333,stroke-width:2px,color:#000;
-    classDef boot fill:#ff9,stroke:#333,stroke-width:2px,color:#000;
-    classDef kernel fill:#9cf,stroke:#333,stroke-width:2px,color:#000;
-    classDef user fill:#9f9,stroke:#333,stroke-width:2px,color:#000;
+    %% Styling - Modern Pastel Palette with High Contrast Text
+    classDef hardware fill:#f3f4f6,stroke:#4b5563,stroke-width:2px,color:#000;
+    classDef boot fill:#fff7ed,stroke:#c2410c,stroke-width:2px,color:#000;
+    classDef kernel fill:#eff6ff,stroke:#2563eb,stroke-width:2px,color:#000;
+    classDef user fill:#ecfdf5,stroke:#059669,stroke-width:2px,color:#000;
 
-    class BIOS,CPU,RAM,IO,VGA hardware;
-    class Bootloader,RealMode,ProtMode boot;
-    class EntryStub,KMain,IDT,PIC,IRQ,Timer,PMM,KHeap,Kbd,Console,Ports,Scheduler,ContextSwitch,TaskStruct kernel;
+    class BIOS,HW_Resources hardware;
+    class Boot16,ProtMode boot;
+    class KEntry,KMain,IDT,Memory,Sched,Keyboard,Display kernel;
     class Shell user;
 ```
 
