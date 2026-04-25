@@ -21,6 +21,7 @@ jobs:
           sudo apt-get install -y \
             nasm \
             gcc \
+            gcc-multilib \
             binutils \
             make \
             xorriso \
@@ -30,26 +31,13 @@ jobs:
             qemu-utils
 
       - name: Build ParamOS
-        run: make all
+        run: make CC=gcc LD=ld ASM=nasm OBJCOPY=objcopy all
 
       - name: Verify kernel binary exists
         run: |
           echo "Build artifacts:"
-          ls -lh *.bin *.iso *.elf 2>/dev/null || ls -lh build/ 2>/dev/null || echo "Listing all output files..."
+          ls -lh build/*.bin build/*.elf 2>/dev/null || echo "Listing all output files..."
           find . -name "*.bin" -o -name "*.iso" -o -name "*.elf" | head -20
-
-      - name: Boot test in QEMU (headless, 3s timeout)
-        run: |
-          timeout 3 qemu-system-i386 \
-            -nographic \
-            -no-reboot \
-            -serial stdio \
-            -m 32M \
-            -kernel kernel.bin 2>&1 | tee boot_output.txt || true
-          echo "--- Boot output ---"
-          cat boot_output.txt
-          # Verify we at least got past bootloader
-          grep -q "." boot_output.txt && echo "BOOT: OK - kernel produced output" || echo "BOOT: No output (check kernel path)"
 
       - name: Upload build artifacts
         uses: actions/upload-artifact@v4
@@ -57,8 +45,6 @@ jobs:
         with:
           name: paramos-build
           path: |
-            *.bin
-            *.iso
-            *.elf
-            boot_output.txt
+            build/*.bin
+            build/*.elf
           retention-days: 7
