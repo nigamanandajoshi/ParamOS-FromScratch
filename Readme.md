@@ -10,6 +10,8 @@ Rather than aiming for feature completeness, ParamOS emphasizes **architectural 
 
 ## 🖥️ System Snapshots
 
+![ParamOS Boot Demo](docs/paramos-demo.gif)
+
 ParamOS running under QEMU, demonstrating successful boot, interrupt handling, memory initialization, task creation, and an interactive kernel shell.
 
 ### Kernel Initialization & Interrupt Handling
