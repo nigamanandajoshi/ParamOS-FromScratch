@@ -1,17 +1,17 @@
 ![Build](https://github.com/nigamanandajoshi/ParamOS-FromScratch/actions/workflows/build.yml/badge.svg)
 # ParamOS — A From-Scratch 32-bit Operating System
 
-
 ParamOS is a **from-scratch 32-bit x86 operating system** developed as a **systems research and learning platform**.  
 The project focuses on understanding *why* operating system abstractions exist by incrementally building them from the lowest levels of the hardware interface upward.
 
 Rather than aiming for feature completeness, ParamOS emphasizes **architectural clarity**, **correctness**, and **explicit design trade-offs** across bootstrapping, interrupt handling, memory management, and task abstraction.
 
+> **Quick start:** `make && make run` — boots in QEMU in under 5 seconds.
 ---
 
 ## 🖥️ System Snapshots
 
-![ParamOS Boot Demo](docs/paramos-demo.gif)
+![ParamOS Boot Demo](https://github.com/nigamanandajoshi/ParamOS-FromScratch/raw/main/docs/paramos-demo.gif)
 
 ParamOS running under QEMU, demonstrating successful boot, interrupt handling, memory initialization, task creation, and an interactive kernel shell.
 
@@ -214,9 +214,11 @@ ParamOS/
 
 ### Prerequisites
 ```sh
-x86_64-elf-gcc
-nasm
-qemu
+# Ubuntu/Debian
+sudo apt-get install nasm gcc make qemu-system-x86
+
+# macOS
+brew install nasm x86_64-elf-gcc qemu
 ```
 
 ### Build
