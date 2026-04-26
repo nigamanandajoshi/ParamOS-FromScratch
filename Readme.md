@@ -17,8 +17,6 @@ ParamOS running under QEMU, demonstrating successful boot, interrupt handling, m
 ### Kernel Initialization & Interrupt Handling
 ![Kernel boot and interrupts](docs/boot_interrupts.png)
 
-### Interactive Kernel Shell
-![ParamOS shell](docs/paramos_shell.png)
 
 ---
 
