@@ -1,5 +1,6 @@
-# ParamOS — A From-Scratch 32-bit Operating System
 ![Build](https://github.com/nigamanandajoshi/ParamOS-FromScratch/actions/workflows/build.yml/badge.svg)
+# ParamOS — A From-Scratch 32-bit Operating System
+
 
 ParamOS is a **from-scratch 32-bit x86 operating system** developed as a **systems research and learning platform**.  
 The project focuses on understanding *why* operating system abstractions exist by incrementally building them from the lowest levels of the hardware interface upward.
